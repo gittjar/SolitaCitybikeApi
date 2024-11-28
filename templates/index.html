@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citybike API</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Citybike API</h1>
+        <p>Current time: {{ current_time }}</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/api/stations">Get all stations</a></li>
+            <li><a href="/api/stations/kalasatama">Get stations by name (Kalasatama)</a></li>
+            <li><a href="/api/station/333">Get station by ID (333)</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Welcome to Citybike API</h2>
+        <p>This is a simple API that provides information about citybike stations in Helsinki. You can use the links above to get information about all stations, stations by name, or a specific station by ID.</p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Citybike API</p>
+    </footer>
+</body>
+</html>
