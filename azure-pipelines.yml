@@ -1,6 +1,6 @@
 # Python to Linux Web App on Azure
 # Build your Python project and deploy it to Azure as a Linux Web App.
-# Change python version to one thats appropriate for your application.
+# Change python version to one that's appropriate for your application.
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
@@ -19,7 +19,7 @@ variables:
   # Environment name
   environmentName: 'solitacitybikeapi'
 
-  # Project root folder. Point to the folder containing manage.py file.
+  # Project root folder. Point to the folder containing app.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
   pythonVersion: '3.11'
@@ -79,7 +79,7 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : solitacitybikeapi'
+            displayName: 'Deploy Azure Web App : $(webAppName)'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
