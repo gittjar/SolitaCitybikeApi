@@ -118,7 +118,7 @@ def create_station():
 @stations_bp.route('/api/station/<int:id>', methods=['PUT'])
 def update_station(id):
     data = request.get_json()
-    required_fields = ['Adress', 'FID', 'ID', 'Kapasiteet', 'Kaupunki', 'Name', 'Namn', 'Nimi', 'Operaattor', 'Osoite', 'x', 'y']
+    required_fields = ['Adress', 'FID', 'Kapasiteet', 'Kaupunki', 'Name', 'Namn', 'Nimi', 'Operaattor', 'Osoite', 'x', 'y']
     
     # Check for missing required fields
     for field in required_fields:
@@ -131,8 +131,8 @@ def update_station(id):
 
     try:
         cursor = conn.cursor()
-        cursor.execute('UPDATE Station SET Adress = ?, FID = ?, ID = ?, Kapasiteet = ?, Kaupunki = ?, Kuva = ?, Name = ?, Namn = ?, Nimi = ?, Operaattor = ?, Osoite = ?, Stad = ?, x = ?, y = ? WHERE ID = ?',
-                       (data['Adress'], data['FID'], data['ID'], data['Kapasiteet'], data['Kaupunki'], data.get('Kuva'), data['Name'], data['Namn'], data['Nimi'], data['Operaattor'], data['Osoite'], data.get('Stad'), data['x'], data['y'], id))
+        cursor.execute('UPDATE Station SET Adress = ?, FID = ?, Kapasiteet = ?, Kaupunki = ?, Kuva = ?, Name = ?, Namn = ?, Nimi = ?, Operaattor = ?, Osoite = ?, Stad = ?, x = ?, y = ? WHERE ID = ?',
+                       (data['Adress'], data['FID'], data['Kapasiteet'], data['Kaupunki'], data.get('Kuva'), data['Name'], data['Namn'], data['Nimi'], data['Operaattor'], data['Osoite'], data.get('Stad'), data['x'], data['y'], id))
         conn.commit()
         conn.close()
         return jsonify({'message': 'Station updated successfully'})
