@@ -5,6 +5,7 @@
 
 trigger:
 - develop
+- main
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
@@ -84,3 +85,4 @@ stages:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+              startupCommand: 'gunicorn --bind 0.0.0.0:8000 app:app'
