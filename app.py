@@ -11,5 +11,5 @@ def index():
     current_time = datetime.datetime.now().strftime("%H:%M:%S")
     return render_template('index.html', current_date=current_date, current_time=current_time)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+if __name__ != '__main__':
+    gunicorn_app = app
