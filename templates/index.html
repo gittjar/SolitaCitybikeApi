@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Citybike API</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <header>
         <h1>Citybike API</h1>
-        <p>Current time: {{ current_time }}</p>
+        <p>{{ current_date }}</p>
+        <p>{{ current_time }}</p>
     </header>
     <nav>
         <ul>
@@ -25,6 +27,12 @@
     </main>
     <footer>
         <p>&copy; 2024 Citybike API</p>
+        <p>Created by gittjar</p>
+        <p>
+            <a class="footer-link" href="https://github.com/gittjar/SolitaCitybikeApi" target="_blank">
+                <i class="fab fa-github"></i> GitHub Repository
+            </a>
+        </p>
     </footer>
 </body>
 </html>
