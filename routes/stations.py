@@ -1,8 +1,8 @@
-from flask import Flask, Blueprint, jsonify, request
+# routes/stations.py
+from flask import Blueprint, jsonify, request
 import pyodbc
 from models import Station
 
-app = Flask(__name__)
 stations_bp = Blueprint('stations', __name__)
 
 # Database connection details
@@ -157,25 +157,19 @@ def delete_station(id):
         conn.close()
         return jsonify({'error': str(e)}), 500
 
-# Custom error handlers
-@app.errorhandler(404)
+# Custom error handlers for the blueprint
+@stations_bp.errorhandler(404)
 def not_found_error(error):
     return jsonify({'error': 'Not found'}), 404
 
-@app.errorhandler(500)
+@stations_bp.errorhandler(500)
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-@app.errorhandler(Exception)
+@stations_bp.errorhandler(Exception)
 def handle_exception(e):
     response = {
         'error': 'An unexpected error occurred',
         'message': str(e)
     }
     return jsonify(response), 500
-
-# Register your blueprint
-app.register_blueprint(stations_bp)
-
-if __name__ == '__main__':
-    app.run(debug=True)
