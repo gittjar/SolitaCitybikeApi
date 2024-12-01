@@ -1,7 +1,5 @@
 # API Documentation
 
-## Cloud and DevOps (todo)
-
 ### GET Requests
 
 #### Get All Stations
