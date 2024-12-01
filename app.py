@@ -1,13 +1,14 @@
-# app.py
 from flask import Flask
 from routes.stations import stations_bp
 
-gunicorn_app = Flask(__name__)
-gunicorn_app.register_blueprint(stations_bp)
+app = Flask(__name__)
 
-@gunicorn_app.route('/')
+# Register the blueprint
+app.register_blueprint(stations_bp, url_prefix='/routes')
+
+@app.route('/')
 def hello():
-    return "Hello, World! This is server root"
+    return "Hello, World! 111"
 
 if __name__ == "__main__":
-    gunicorn_app.run(host='0.0.0.0', port=8000)
+    app.run()
