@@ -5,24 +5,24 @@
 ### GET Requests
 
 #### Get All Stations
-- **URL:** `http://0.0.0.0:8000/api/stations`
+- **URL:** `https://solitacitybikeapi.azurewebsites.net/api/stations`
 - **Method:** `GET`
 - **Description:** Retrieve all stations.
 
 #### Get Station by ID
-- **URL:** `http://0.0.0.0:8000/api/station/333`
+- **URL:** `https://solitacitybikeapi.azurewebsites.net/api/station/333`
 - **Method:** `GET`
 - **Description:** Retrieve a station by its ID.
 
 #### Get Stations by Name
-- **URL:** `http://0.0.0.0:8000/api/stations/teurastamo`
+- **URL:** `https://solitacitybikeapi.azurewebsites.net/api/stations/teurastamo`
 - **Method:** `GET`
 - **Description:** Retrieve stations by name.
 
 ### POST Request
 
 #### Create a New Station
-- **URL:** `http://0.0.0.0:8000/api/stations`
+- **URL:** `https://solitacitybikeapi.azurewebsites.net/api/stations`
 - **Method:** `POST`
 - **Description:** Create a new station.
 - **Request Body:**
@@ -43,10 +43,10 @@
       "y": 62.16952
   }
 
-#### PUT Request
+### PUT Request
 #### Update an Existing Station
 
-- **URL** `http://0.0.0.0:8000/api/station/6656`
+- **URL** `https://solitacitybikeapi.azurewebsites.net/api/station/6656`
 - **Method** `PUT`
 - **Description** Update an existing station.
 - **Request Body**
@@ -71,7 +71,7 @@
 
 #### Delete a Station
 
-- **URL** `http://0.0.0.0:8000/api/station/6657`
+- **URL** `https://solitacitybikeapi.azurewebsites.net/api/station/6657`
 - **Method** `DELETE`
 - **Description** Delete a station by its ID.
 
