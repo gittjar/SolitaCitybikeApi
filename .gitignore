@@ -125,3 +125,10 @@ cython_debug/
 
 # VS Code
 .vscode/
+
+.env
+.env.local
+.env.*.local
+venv/
+__pypackages__/
+*.log

@@ -1,26 +1,31 @@
 # routes/stations.py
 from flask import Blueprint, jsonify, request
 import pyodbc
+import os
+from dotenv import load_dotenv
 from models import Station
+
+# Load environment variables from .env file
+load_dotenv()
 
 stations_bp = Blueprint('stations', __name__)
 
-# Database connection details
-server = 'tcp:stone900.database.windows.net,1433'
-database = 'GreenlizardDb'
-username = 'kingdat4'
-password = 'SecretPassword2023'
-driver = '{ODBC Driver 18 for SQL Server}'
+# Database connection details from environment variables
+server = os.getenv('DB_SERVER')
+database = os.getenv('DB_DATABASE')
+username = os.getenv('DB_USERNAME')
+password = os.getenv('DB_PASSWORD')
+driver = os.getenv('DB_DRIVER')
 
 # Create a database connection
 def get_db_connection():
     try:
         conn = pyodbc.connect(
-            'DRIVER={ODBC Driver 18 for SQL Server};'
-            'SERVER=tcp:stone900.database.windows.net,1433;'
-            'DATABASE=GreenlizardDb;'
-            'UID=kingdat4;'
-            'PWD=SecretPassword2023;'
+            f'DRIVER={driver};'
+            f'SERVER={server};'
+            f'DATABASE={database};'
+            f'UID={username};'
+            f'PWD={password};'
             'Encrypt=yes;'
             'TrustServerCertificate=no;'
             'Connection Timeout=30;'
