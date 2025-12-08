@@ -22,12 +22,12 @@ def get_db_connection():
     try:
         conn = pyodbc.connect(
             f'DRIVER={driver};'
-            f'SERVER={server};'
+            f'SERVER={server},1433;'
             f'DATABASE={database};'
             f'UID={username};'
             f'PWD={password};'
             'Encrypt=yes;'
-            'TrustServerCertificate=no;'
+            'TrustServerCertificate=yes;'
             'Connection Timeout=30;'
         )
         return conn
@@ -35,7 +35,7 @@ def get_db_connection():
         print(f"Error connecting to database: {e}")
         return None
 
-# Route to get all stations
+# Route to get all stations with optional city filter and sorting
 @stations_bp.route('/api/stations', methods=['GET'])
 def get_stations():
     conn = get_db_connection()
@@ -43,12 +43,53 @@ def get_stations():
         return jsonify({'error': 'Database connection failed'}), 500
 
     try:
+        # Get query parameters
+        city = request.args.get('city')
+        sort_by = request.args.get('sort_by', 'Nimi')  # Default sort by name
+        order = request.args.get('order', 'ASC')  # ASC or DESC
+        
+        # Validate sort_by to prevent SQL injection
+        valid_columns = ['ID', 'Nimi', 'Name', 'Kaupunki', 'Kapasiteet', 'Osoite']
+        if sort_by not in valid_columns:
+            sort_by = 'Nimi'
+        
+        # Validate order
+        if order.upper() not in ['ASC', 'DESC']:
+            order = 'ASC'
+        
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Station')
+        
+        if city:
+            # Filter by city
+            query = f'SELECT * FROM Station WHERE Kaupunki LIKE ? ORDER BY {sort_by} {order}'
+            cursor.execute(query, ('%' + city + '%',))
+        else:
+            # Get all stations
+            query = f'SELECT * FROM Station ORDER BY {sort_by} {order}'
+            cursor.execute(query)
+        
         rows = cursor.fetchall()
         stations = [Station(*row).__dict__ for row in rows]
         conn.close()
         return jsonify(stations)
+    except Exception as e:
+        conn.close()
+        return jsonify({'error': str(e)}), 500
+
+# Route to get unique cities
+@stations_bp.route('/api/cities', methods=['GET'])
+def get_cities():
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute('SELECT DISTINCT Kaupunki FROM Station WHERE Kaupunki IS NOT NULL ORDER BY Kaupunki')
+        rows = cursor.fetchall()
+        cities = [row[0] for row in rows]
+        conn.close()
+        return jsonify(cities)
     except Exception as e:
         conn.close()
         return jsonify({'error': str(e)}), 500
