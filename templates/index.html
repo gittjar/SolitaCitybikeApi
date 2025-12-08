@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Bike Stations API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#64748b',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-light text-slate-900 mb-2">City Bike Stations</h1>
+                    <p class="text-slate-500 font-light">API Dashboard</p>
+                </div>
+                <div class="text-6xl opacity-10">→</div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-8">
+                    <h2 class="text-lg font-light text-slate-900 mb-6 pb-4 border-b border-slate-200">Filters</h2>
+                
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Search</label>
+                            <input type="text" id="searchText" placeholder="Station name..." 
+                                class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">City</label>
+                            <select id="cityFilter" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all">
+                                <option value="">All Cities</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Sort By</label>
+                            <select id="sortBy" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all">
+                                <option value="Nimi">Name</option>
+                                <option value="Kaupunki">City</option>
+                                <option value="Kapasiteet">Capacity</option>
+                                <option value="Osoite">Address</option>
+                                <option value="ID">ID</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Order</label>
+                            <select id="sortOrder" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all">
+                                <option value="ASC">↑ Ascending</option>
+                                <option value="DESC">↓ Descending</option>
+                            </select>
+                        </div>
+                        
+                        <div class="pt-4 space-y-2">
+                            <button onclick="searchStations()" class="w-full px-4 py-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-light flex items-center justify-center gap-2">
+                                <span>Search</span>
+                                <span>→</span>
+                            </button>
+                            <button onclick="clearSearch()" class="w-full px-4 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-light flex items-center justify-center gap-2">
+                                <span>↺</span>
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <div id="resultsSection" style="display: none;">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-light text-slate-900">Results</h3>
+                            <span class="px-3 py-1 bg-slate-900 text-white text-sm rounded-full font-light" id="resultCount">0</span>
+                        </div>
+                    </div>
+                    <div id="stationsList" class="space-y-4"></div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-light text-slate-900 mb-4 pb-4 border-b border-slate-200">API Endpoints</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                            <span class="text-slate-400">→</span>
+                            <code class="text-sm text-slate-700 font-mono">GET /api/stations</code>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                            <span class="text-slate-400">→</span>
+                            <code class="text-sm text-slate-700 font-mono">GET /api/stations?city=Helsinki</code>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                            <span class="text-slate-400">→</span>
+                            <code class="text-sm text-slate-700 font-mono">GET /api/stations?sort_by=Kapasiteet&order=DESC</code>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                            <span class="text-slate-400">→</span>
+                            <code class="text-sm text-slate-700 font-mono">GET /api/cities</code>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                            <span class="text-slate-400">→</span>
+                            <code class="text-sm text-slate-700 font-mono">GET /api/stations/&lt;text&gt;</code>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                            <span class="text-slate-400">→</span>
+                            <code class="text-sm text-slate-700 font-mono">GET /api/station/&lt;id&gt;</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

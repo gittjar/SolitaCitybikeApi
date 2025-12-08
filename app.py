@@ -1,10 +1,20 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template
 from routes.stations import stations_bp
+from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config)
 
-# Register the blueprint
+# Register blueprints
 app.register_blueprint(stations_bp, url_prefix='/')
+
+@app.route('/')
+def index():
+    """Render the main page"""
+    return render_template('index.html')
+
+if __name__ == "__main__":
+    app.run()
 
 @app.route('/')
 def hello():

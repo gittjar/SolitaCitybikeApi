@@ -1,39 +1,12 @@
 # routes/stations.py
+"""
+Stations API routes
+"""
 from flask import Blueprint, jsonify, request
-import pyodbc
-import os
-from dotenv import load_dotenv
 from models import Station
-
-# Load environment variables from .env file
-load_dotenv()
+from database import get_db_connection
 
 stations_bp = Blueprint('stations', __name__)
-
-# Database connection details from environment variables
-server = os.getenv('DB_SERVER')
-database = os.getenv('DB_DATABASE')
-username = os.getenv('DB_USERNAME')
-password = os.getenv('DB_PASSWORD')
-driver = os.getenv('DB_DRIVER')
-
-# Create a database connection
-def get_db_connection():
-    try:
-        conn = pyodbc.connect(
-            f'DRIVER={driver};'
-            f'SERVER={server},1433;'
-            f'DATABASE={database};'
-            f'UID={username};'
-            f'PWD={password};'
-            'Encrypt=yes;'
-            'TrustServerCertificate=yes;'
-            'Connection Timeout=30;'
-        )
-        return conn
-    except pyodbc.Error as e:
-        print(f"Error connecting to database: {e}")
-        return None
 
 # Route to get all stations with optional city filter and sorting
 @stations_bp.route('/api/stations', methods=['GET'])
