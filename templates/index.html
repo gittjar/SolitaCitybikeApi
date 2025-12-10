@@ -20,6 +20,15 @@
     </script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden fixed top-4 right-4 z-50 transform transition-all duration-300 ease-in-out">
+        <div id="toastContent" class="bg-white rounded-xl shadow-lg border px-6 py-4 flex items-center gap-3 min-w-[300px]">
+            <span id="toastIcon" class="text-2xl"></span>
+            <p id="toastMessage" class="text-sm font-light flex-1"></p>
+            <button onclick="hideToast()" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
+        </div>
+    </div>
+
     <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- Header -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
@@ -28,7 +37,10 @@
                     <h1 class="text-3xl font-light text-slate-900 mb-2">City Bike Stations</h1>
                     <p class="text-slate-500 font-light">API Dashboard</p>
                 </div>
-                <div class="text-6xl opacity-10">→</div>
+                <button onclick="openCreateModal()" class="px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-light flex items-center gap-2">
+                    <span>+</span>
+                    <span>New Station</span>
+                </button>
             </div>
         </div>
         
@@ -98,35 +110,193 @@
                 </div>
                 
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                    <h3 class="text-lg font-light text-slate-900 mb-4 pb-4 border-b border-slate-200">API Endpoints</h3>
-                    <div class="space-y-2">
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                            <span class="text-slate-400">→</span>
-                            <code class="text-sm text-slate-700 font-mono">GET /api/stations</code>
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
+                        <h3 class="text-lg font-light text-slate-900">API Reference</h3>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs rounded-full font-mono">REST API</span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- GET All Stations -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-mono rounded">GET</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/stations</code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Get all stations with optional filtering and sorting</p>
+                            <div class="mt-3 ml-14 space-y-1">
+                                <div class="text-xs text-slate-400">
+                                    <span class="font-mono">?city=</span><span class="text-slate-600">Helsinki</span>
+                                </div>
+                                <div class="text-xs text-slate-400">
+                                    <span class="font-mono">?sort_by=</span><span class="text-slate-600">Kapasiteet</span>
+                                    <span class="mx-1">&</span>
+                                    <span class="font-mono">order=</span><span class="text-slate-600">DESC</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                            <span class="text-slate-400">→</span>
-                            <code class="text-sm text-slate-700 font-mono">GET /api/stations?city=Helsinki</code>
+
+                        <!-- GET Cities -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-mono rounded">GET</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/cities</code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Get list of all unique cities</p>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                            <span class="text-slate-400">→</span>
-                            <code class="text-sm text-slate-700 font-mono">GET /api/stations?sort_by=Kapasiteet&order=DESC</code>
+
+                        <!-- GET Station by Name -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-mono rounded">GET</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/stations/<span class="text-blue-600">{text}</span></code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Search stations by name (partial match)</p>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                            <span class="text-slate-400">→</span>
-                            <code class="text-sm text-slate-700 font-mono">GET /api/cities</code>
+
+                        <!-- GET Station by ID -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-mono rounded">GET</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/station/<span class="text-blue-600">{id}</span></code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Get specific station by ID</p>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                            <span class="text-slate-400">→</span>
-                            <code class="text-sm text-slate-700 font-mono">GET /api/stations/&lt;text&gt;</code>
+
+                        <!-- POST Create Station -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-mono rounded">POST</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/stations</code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Create a new station</p>
+                            <div class="mt-2 ml-14 text-xs text-slate-400">
+                                <span class="font-mono">Content-Type:</span> application/json
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                            <span class="text-slate-400">→</span>
-                            <code class="text-sm text-slate-700 font-mono">GET /api/station/&lt;id&gt;</code>
+
+                        <!-- PUT Update Station -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-mono rounded">PUT</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/station/<span class="text-blue-600">{id}</span></code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Update existing station</p>
+                            <div class="mt-2 ml-14 text-xs text-slate-400">
+                                <span class="font-mono">Content-Type:</span> application/json
+                            </div>
+                        </div>
+
+                        <!-- DELETE Station -->
+                        <div class="group border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-all">
+                            <div class="flex items-start gap-3 mb-2">
+                                <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-mono rounded">DELETE</span>
+                                <code class="text-sm text-slate-900 font-mono flex-1">/api/station/<span class="text-blue-600">{id}</span></code>
+                            </div>
+                            <p class="text-xs text-slate-500 ml-14">Delete station permanently</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Info Box -->
+                    <div class="mt-6 pt-4 border-t border-slate-200">
+                        <div class="flex items-start gap-2 text-xs text-slate-500">
+                            <span class="text-slate-300">→</span>
+                            <p class="font-light">All endpoints return JSON responses. Authentication not required.</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div id="formModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8 my-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-light text-slate-900" id="modalTitle">New Station</h3>
+                <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-600 text-2xl">✕</button>
+            </div>
+            
+            <form id="stationForm" class="space-y-4">
+                <input type="hidden" id="editId">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Name (Finnish)</label>
+                        <input type="text" id="formNimi" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Name (Swedish)</label>
+                        <input type="text" id="formNamn" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Name (English)</label>
+                    <input type="text" id="formName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Address (Finnish)</label>
+                        <input type="text" id="formOsoite" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Address (Swedish)</label>
+                        <input type="text" id="formAdress" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">City</label>
+                        <input type="text" id="formKaupunki" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Operator</label>
+                        <input type="text" id="formOperaattor" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Capacity</label>
+                        <input type="number" id="formKapasiteet" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">FID</label>
+                        <input type="number" id="formFID" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Stad</label>
+                        <input type="text" id="formStad" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Longitude (x)</label>
+                        <input type="number" step="any" id="formX" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Latitude (y)</label>
+                        <input type="number" step="any" id="formY" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wide">Image URL</label>
+                    <input type="url" id="formKuva" placeholder="https://..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeFormModal()" class="flex-1 px-4 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-light">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-light">
+                        Save Station
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     

@@ -127,8 +127,13 @@ def create_station():
         cursor.execute('INSERT INTO Station (Adress, FID, Kapasiteet, Kaupunki, Kuva, Name, Namn, Nimi, Operaattor, Osoite, Stad, x, y) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                        (data['Adress'], data['FID'], data['Kapasiteet'], data['Kaupunki'], data.get('Kuva'), data['Name'], data['Namn'], data['Nimi'], data['Operaattor'], data['Osoite'], data.get('Stad'), data['x'], data['y']))
         conn.commit()
+        
+        # Get the ID of the newly inserted station
+        cursor.execute('SELECT @@IDENTITY')
+        new_id = cursor.fetchone()[0]
+        
         conn.close()
-        return jsonify({'message': 'Station created successfully'}), 201
+        return jsonify({'message': 'Station created successfully', 'id': int(new_id)}), 201
     except Exception as e:
         conn.close()
         return jsonify({'error': str(e)}), 500

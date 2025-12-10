@@ -13,6 +13,11 @@ def index():
     """Render the main page"""
     return render_template('index.html')
 
+@app.route('/station/<int:id>')
+def station_detail(id):
+    """Render station detail page"""
+    return render_template('station_detail.html', station_id=id)
+
 if __name__ == "__main__":
     app.run()
 
